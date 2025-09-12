@@ -1,7 +1,11 @@
 package com.example.TaskManager.controller;
 
+import com.example.TaskManager.controller.dto.TaskCreateDto;
+import com.example.TaskManager.controller.dto.TaskResponseDto;
+import com.example.TaskManager.controller.dto.TaskUpdateDto;
 import com.example.TaskManager.model.Task;
 import com.example.TaskManager.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -30,23 +34,23 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}")
-    public Optional<Task> getTaskById(@PathVariable("id") int id){
+    public Task getTaskById(@PathVariable("id") int id){
         return  taskService.getTaskById(id);
     }
 
     @PostMapping("/task")
-    public void addTask(@RequestBody Task task){
-        taskService.addTask(task);
+    public TaskResponseDto addTask(@Valid @RequestBody TaskCreateDto taskDto){
+        return taskService.addTask(taskDto);
     }
 
     @PutMapping("/task/{id}")
-    public void updateTask(@PathVariable("id") int id, @RequestBody Task newTask){
+    public void updateTask(@PathVariable("id") int id, @Valid @RequestBody TaskUpdateDto newTask){
         taskService.updateTask(id, newTask);
     }
 
     @PatchMapping("/task/{id}")
-    public void patchUpdateTask(@PathVariable("id") int id, @RequestBody Map<String, Object> updates){
-        taskService.patchUpdateTask(id, updates);
+    public void patchUpdateTask(@PathVariable("id") int id, @Valid @RequestBody TaskUpdateDto newTask){
+        taskService.patchUpdateTask(id, newTask);
     }
 
     @DeleteMapping("/task/{id}")
