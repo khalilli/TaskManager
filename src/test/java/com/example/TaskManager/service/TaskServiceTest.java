@@ -1,5 +1,7 @@
 package com.example.TaskManager.service;
 
+import com.example.TaskManager.controller.dto.TaskCreateDto;
+import com.example.TaskManager.controller.dto.TaskResponseDto;
 import com.example.TaskManager.model.Task;
 import com.example.TaskManager.repository.TaskRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -21,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,7 +40,6 @@ public class TaskServiceTest {
 
     @BeforeEach
     void setUp(){
-        MockitoAnnotations.openMocks(this);
         createdDate = Instant.now();
         updatedDate = Instant.now();
     }
@@ -72,5 +75,20 @@ public class TaskServiceTest {
                 .isEqualTo(expectedTasks);
 
 
+    }
+
+    @Test
+    void addTask_shouldSucceed(){
+        LocalDate completedDate = LocalDate.parse("2025-09-05");
+        TaskCreateDto newTask = new TaskCreateDto("topic1", "description1", true, completedDate);
+        Task savedTask = new Task(1,"topic1","description1", true, completedDate, createdDate, updatedDate);
+        TaskResponseDto responseTask = new TaskResponseDto(1,"topic1", "description1", true, completedDate);
+
+        when(taskRepository.save(any(Task.class))).thenReturn(savedTask);
+
+        TaskResponseDto createdTask = taskService.addTask(newTask);
+
+        assertThat(createdTask).isEqualTo(responseTask);
+        verify(taskRepository).save(any(Task.class));
     }
 }
