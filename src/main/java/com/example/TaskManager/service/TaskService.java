@@ -8,6 +8,8 @@ import com.example.TaskManager.model.Task;
 import com.example.TaskManager.repository.TaskRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
+    @Cacheable("tasks")
     public List<Task> getAllTasks(){
         return taskRepository.findAll();
     }
@@ -56,6 +59,7 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value="tasks", allEntries=true)
     @Transactional
     public TaskResponseDto addTask(TaskCreateDto taskDto){
         Task task = new Task();
@@ -68,6 +72,7 @@ public class TaskService {
         return toResponse(saved);
     }
 
+    @CacheEvict(value="tasks", allEntries=true)
     @Transactional
     public void updateTask(int id, TaskUpdateDto newTask){
         Task old_task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not find with id " + id));
@@ -76,6 +81,7 @@ public class TaskService {
         taskRepository.save(old_task);
     }
 
+    @CacheEvict(value="tasks", allEntries=true)
     @Transactional
     public void patchUpdateTask(int id, TaskUpdateDto task){
         Task old_task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException(("Task not find with id " + id)));
@@ -91,6 +97,7 @@ public class TaskService {
         taskRepository.save(old_task);
     }
 
+    @CacheEvict(value="tasks", allEntries=true)
     @Transactional
     public void deleteTask(int id){
         taskRepository.deleteById(id);
@@ -101,7 +108,8 @@ public class TaskService {
                 task.getId(),
                 task.getTopic(),
                 task.getDescription(),
-                task.getCompleted()
+                task.getCompleted(),
+                task.getCompletedDate()
         );
     }
 }

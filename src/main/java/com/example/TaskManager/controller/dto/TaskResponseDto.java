@@ -3,6 +3,8 @@ package com.example.TaskManager.controller.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class TaskResponseDto {
@@ -10,4 +12,5 @@ public class TaskResponseDto {
     private String topic;
     private String description;
     private Boolean completed;
+    private LocalDate completedDate;
 }
