@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -29,4 +31,7 @@ public class Task {
 
     @NotNull
     private Boolean completed;
+
+    @NotNull
+    private LocalDate completedDate;
 }

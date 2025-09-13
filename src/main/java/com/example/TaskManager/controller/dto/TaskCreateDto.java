@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class TaskCreateDto{
     @NotBlank(message = "Topic is required")
@@ -14,4 +16,7 @@ public class TaskCreateDto{
 
     @NotNull
     private Boolean completed = false;
+
+    @NotNull
+    private LocalDate completedDate;
 }

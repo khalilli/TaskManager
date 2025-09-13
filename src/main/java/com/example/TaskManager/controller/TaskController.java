@@ -6,9 +6,7 @@ import com.example.TaskManager.controller.dto.TaskUpdateDto;
 import com.example.TaskManager.model.Task;
 import com.example.TaskManager.service.TaskService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,12 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +34,21 @@ public class TaskController {
     @GetMapping("/task/{id}")
     public Task getTaskById(@PathVariable("id") int id){
         return  taskService.getTaskById(id);
+    }
+
+    @GetMapping("/tasks/overdue")
+    public List<Task> getOverdueTasks(@RequestBody LocalDate dueDate){
+        return taskService.getOverdueTasks(dueDate);
+    }
+
+    @GetMapping("/tasks/completed")
+    public Map<Boolean, List<Task>> getCompletedTasks(){
+        return taskService.getCompletedTasks();
+    }
+
+    @GetMapping("/tasks/ntasks")
+    public List<Task> getNTasks(@RequestBody int n){
+        return taskService.getNTasks(n);
     }
 
     @PostMapping("/task")
