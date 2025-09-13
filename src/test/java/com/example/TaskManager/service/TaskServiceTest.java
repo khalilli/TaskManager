@@ -31,6 +31,8 @@ import static org.mockito.Mockito.when;
 @DisplayName("All tests related to Task Management CRUD")
 public class TaskServiceTest {
     @Mock
+    private NotificationService notificationService;
+    @Mock
     private TaskRepository taskRepository;
     @InjectMocks
     private TaskService taskService;
@@ -78,7 +80,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void addTask_shouldSucceed(){
+    void addTask_shouldSucceed() throws InterruptedException {
         LocalDate completedDate = LocalDate.parse("2025-09-05");
         TaskCreateDto newTask = new TaskCreateDto("topic1", "description1", true, completedDate);
         Task savedTask = new Task(1,"topic1","description1", true, completedDate, createdDate, updatedDate);

@@ -52,7 +52,7 @@ public class TaskController {
     }
 
     @PostMapping("/task")
-    public TaskResponseDto addTask(@Valid @RequestBody TaskCreateDto taskDto){
+    public TaskResponseDto addTask(@Valid @RequestBody TaskCreateDto taskDto) throws InterruptedException {
         return taskService.addTask(taskDto);
     }
 

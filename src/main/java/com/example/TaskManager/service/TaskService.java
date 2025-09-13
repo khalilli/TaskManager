@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final NotificationService notificationService;
+    private final SimpleThreadService simpleThreadService;
+
     private static final Logger logger = (Logger) LoggerFactory.getLogger(TaskService.class);
 
     @Cacheable("tasks")
@@ -64,7 +67,7 @@ public class TaskService {
 
     @CacheEvict(value="tasks", allEntries=true)
     @Transactional
-    public TaskResponseDto addTask(TaskCreateDto taskDto){
+    public TaskResponseDto addTask(TaskCreateDto taskDto) throws InterruptedException {
         logger.info("Adding new task.");
         Task task = new Task();
         task.setTopic(taskDto.getTopic());
@@ -73,6 +76,9 @@ public class TaskService {
         task.setCompletedDate(taskDto.getCompletedDate());
 
         Task saved = taskRepository.save(task);
+
+        notificationService.sendTaskCreatedNotification(task, task.getId());
+        simpleThreadService.runInNewThread("Task " + task.getId() + " has been created!");
         return toResponse(saved);
     }
 
