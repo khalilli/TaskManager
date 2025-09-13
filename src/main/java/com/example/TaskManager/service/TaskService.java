@@ -8,12 +8,13 @@ import com.example.TaskManager.model.Task;
 import com.example.TaskManager.repository.TaskRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,11 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(TaskService.class);
 
     @Cacheable("tasks")
     public List<Task> getAllTasks(){
+        logger.info("All tasks are displayed.");
         return taskRepository.findAll();
     }
 
@@ -62,6 +65,7 @@ public class TaskService {
     @CacheEvict(value="tasks", allEntries=true)
     @Transactional
     public TaskResponseDto addTask(TaskCreateDto taskDto){
+        logger.info("Adding new task.");
         Task task = new Task();
         task.setTopic(taskDto.getTopic());
         task.setDescription(taskDto.getDescription());
