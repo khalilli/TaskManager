@@ -1,5 +1,6 @@
 package com.example.TaskManager.service;
 
+import com.example.TaskManager.annotations.MyLog;
 import com.example.TaskManager.controller.dto.TaskCreateDto;
 import com.example.TaskManager.controller.dto.TaskResponseDto;
 import com.example.TaskManager.controller.dto.TaskUpdateDto;
@@ -65,6 +66,7 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
+    @MyLog(message = "A new task has been added!")
     @CacheEvict(value="tasks", allEntries=true)
     @Transactional
     public TaskResponseDto addTask(TaskCreateDto taskDto) throws InterruptedException {
